@@ -1,7 +1,8 @@
-function [y] = sample(func, ny, nxi)
-% [y] = sample(func, ny, nxi)
+function [y, xi] = sample(func, ny, nxi)
+% [y, xi] = sample(func, ny, nxi)
 % sample a cdf
 % y - array of sampled points
+% xi - random points solved for
 % func - function handle of CDF
 % ny - number of points for inerpolation table
 % nxi - number of random points to sample
