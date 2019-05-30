@@ -8,11 +8,11 @@ function [x] = newton(f, x0, tol)
 
 x = x0; % current guess
 % use finite difference to approximate derivative
-h = 1e-7; 
+h = 1e-4; 
 fp = (f(x+h) - f(x)) / h;
 % get next guess
 xn = x - (f(x) / fp);
-while abs(x - xn) < tol
+while abs(x - xn) > tol
 	x = xn;
 	fp = (f(x+h) - f(x)) / h;
 	xn = x - (f(x) / fp);
