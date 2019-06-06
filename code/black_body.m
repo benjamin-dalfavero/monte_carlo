@@ -17,8 +17,6 @@ n = floor(xi.*N);
 u = N*xi - n;
 y = yint(n+1) + (yint(n+2) - yint(n+1)) .* u;
 
-%% plot results
-hold on
-	plot(lt, R)
-	plot(y, xi)
-hold off
+%% get results in terms of lambda and probability
+T = 500; % temperature in K
+lambda = lt / T;
