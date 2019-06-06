@@ -25,6 +25,9 @@ plot(y, xi)
 hold off
 title('Exact and numerical CDF values')
 
-%% get results in terms of lambda and probability
+%% get results in terms of lambda and intensity
 T = 500; % temperature in K
-lambda = lt / T;
+% get array of wavelengths
+lambda = y / T;
+% get vector of planck function values from file,
+% multiply by T^5/sigma
