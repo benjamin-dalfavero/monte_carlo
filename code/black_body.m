@@ -17,6 +17,14 @@ n = floor(xi.*N);
 u = N*xi - n;
 y = yint(n+1) + (yint(n+2) - yint(n+1)) .* u;
 
+%% plot exact vs numerial cdf
+figure(1)
+hold on
+plot(lt, R)
+plot(y, xi)
+hold off
+title('Exact and numerical CDF values')
+
 %% get results in terms of lambda and probability
 T = 500; % temperature in K
 lambda = lt / T;
