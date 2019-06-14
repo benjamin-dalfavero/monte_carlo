@@ -21,13 +21,6 @@ y = yint(n+1) + (yint(n+2) - yint(n+1)) .* u;
 figure(1)
 hold on
 plot(lt, R)
-plot(y, xi)
+plot(sort(y), sort(xi))
 hold off
 title('Exact and numerical CDF values')
-
-%% get results in terms of lambda and intensity
-T = 500; % temperature in K
-% get array of wavelengths
-lambda = y / T;
-% get vector of planck function values from file,
-% multiply by T^5/sigma
