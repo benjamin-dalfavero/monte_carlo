@@ -21,6 +21,6 @@ y = yint(n+1) + (yint(n+2) - yint(n+1)) .* u;
 figure(1)
 hold on
 plot(lt, R, '-')
-plot(y, xi, 'o')
+plot(sort(y), sort(xi), 'o')
 hold off
 title('Exact and numerical CDF values')
