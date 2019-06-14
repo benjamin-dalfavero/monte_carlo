@@ -12,6 +12,7 @@ tol = 1e-4;
 % give error if out of bounds
 if yq < min(y) || yq > max(y)
 	disp('out of bounds')
+	xq = NaN;
 	return;
 end
 % find bracketed interval

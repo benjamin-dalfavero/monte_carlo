@@ -20,7 +20,7 @@ y = yint(n+1) + (yint(n+2) - yint(n+1)) .* u;
 %% plot exact vs numerial cdf
 figure(1)
 hold on
-plot(lt, R)
-plot(sort(y), sort(xi))
+plot(lt, R, '-')
+plot(y, xi, 'o')
 hold off
 title('Exact and numerical CDF values')
