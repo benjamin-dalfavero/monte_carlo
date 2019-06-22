@@ -4,8 +4,6 @@
 dat = readmatrix('../data/black_body.csv');
 lt = dat(:, 1); % lambda * T
 F = dat(:, 2); % associated CDF value
-IsT = dat(:, 3); % I / sigma T^5
-I_norm = dat(:, 4); % normalized intensity
 
 %% get temperature and number of bins
 N = input('number of bins: ');
@@ -33,5 +31,5 @@ energy_bins = e * count_hist;
 %% plot results
 plot(lambda_hist, energy_bins, '--');
 xlabel('\lambda (\mu m)')
-ylable('E (ergs)')
+ylabel('E (ergs)')
 title('Energy emitted vs wavelength')
