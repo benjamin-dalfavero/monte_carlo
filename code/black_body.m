@@ -1,53 +1,37 @@
 %% black body radiation
 
 %% get data from table
-N = 100; % number of points in interpolation table
-nbundles = 500; % number of bundles
 dat = readmatrix('../data/black_body.csv');
 lt = dat(:, 1); % lambda * T
+F = dat(:, 2); % associated CDF value
 IsT = dat(:, 3); % I / sigma T^5
 I_norm = dat(:, 4); % normalized intensity
-F = dat(:, 2); % associated CDF value
+
+%% get temperature and number of bins
+N = input('number of bins: ');
+T = input('temperature in K: ');
 
 %% numerically invert cdf
-% generate y_n points
-nN = linspace(0, N, N+1) ./ N; % values to find inverses of
-yint = arrayfun(@(n) tablefind(lt, F, n), nN);
-% solve for random points
-xi = rand(1, nbundles);
-n = floor(xi.*N);
-u = N*xi - n;
-y = yint(n+1) + (yint(n+2) - yint(n+1)) .* u;
-xi = sort(xi);
-y = sort(y);
+xi = rand(1, N);
+% find lambda * T for each xi and convert to lambda
+lT_num = arrayfun(@(x) tablefind(lt, F, x), xi);
+lambda_num = lT_num / T;
 
-%% plot exact vs numerial cdf
-figure(1)
-hold on
-plot(lt, F, '-')
-plot(y, xi, 'o')
-hold off
-title('Exact and numerical CDF values')
+%% sort wavelengths into historgram bins
+% lambda values from table
+lambda = lt / T;
+% bins for histgram
+lambda_hist = linspace(min(lambda), max(lambda), N);
+% bundles for each bin
+count_hist = histcounts(lambda_num, N);
 
-%% get intensity vs temperature
-% constants
-T = input('Temperature in K: ')
-sigma = 5.670E-8; % W m^-2 K^-4
-% exact result from table
-I = IsT * sigma * T^5;
-lambda = lt / T; % um
-% convert numerical results
-lambda_num = y / T;
-IsT_num = interp1(lt, IsT, y);
-I_num = IsT_num * sigma * T^5;
+%% get energy per bundle and get energy for each bin
+sigma = 5.670374e-8; % stefan-boltzman constant
+e = sigma * T^4 / N;
+energy_bins = e * count_hist;
 
-%% plot final result
-figure(2)
-hold on
-plot(lambda, I, '-')
-plot(lambda_num, I_num, 'o-')
-hold off
-title('Intensity vs wavelength')
-legend('exact', 'numerical')
+%% plot results
+plot(lambda_hist, energy_bins, '--');
 xlabel('\lambda (\mu m)')
-ylabel('I')
+ylable('E (ergs)')
+title('Energy emitted vs wavelength')
