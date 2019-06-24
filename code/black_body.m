@@ -13,12 +13,14 @@ T = input('temperature in K: ');
 xi = rand(1, N);
 % find lambda * T for each xi and convert to lambda
 lT_num = arrayfun(@(x) tablefind(lt, F, x), xi);
-lambda_num = lT_num / T;
+% take only lT where concentrated
+lT_conc = lT_num(and((lT_num >= 1.5e4), (lT_num <= 4e4)));
+lambda_num = lT_conc / T;
 
 %% get energy per bundle
 sigma = 5.670374e-8; % stefan-boltzman constant
 e = sigma * T^4 / N;
 
 %% histrogram of wavelength distribution
-nbins = 15;
+nbins = 200;
 histogram(lambda_num, nbins)
