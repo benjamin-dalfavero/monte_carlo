@@ -17,7 +17,7 @@ xi = rand(1, N);
 % find lambda * T for each xi and convert to lambda
 lT_num = arrayfun(@(x) tablefind(lt, F, x), xi);
 % take lT only where concentrated
-lT_conc = lT_num(and((lT_num >= 1.5e4), (lT_num <= 4e4)));
+lT_conc = lT_num(and((lT_num >= 0.6e3), (lT_num <= 4e4)));
 % get wavelengths
 lambda_num = lT_conc / T;
 
