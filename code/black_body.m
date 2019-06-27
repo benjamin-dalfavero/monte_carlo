@@ -4,7 +4,7 @@
 dat = csvread('../data/black_body.csv');
 lt = dat(:, 1); % lambda * T
 F = dat(:, 2); % associated CDF value
-IsT = dat(:, 3); % Intensity / sigma T^5
+IsT = dat(:, 3); % I / sigma T^5
 I_norm = dat(:, 4); % normalized intensity
 
 %% get temperature and number of bins
@@ -21,14 +21,29 @@ lT_conc = lT_num(and((lT_num >= 1.5e4), (lT_num <= 4e4)));
 % get wavelengths
 lambda_num = lT_conc / T;
 
-%% energy per bin
+%% sort wavelengths into bins and give results
+[bin_counts, lambda_bins] = histcounts(lambda_num, nbins);
+
+%% convert to emissive power
+% emissive power per bin
 sigma = 5.670374e-8; % W m^-2 K^-4
 e = sigma * T^4 / N;
+Elb_num = e * bin_counts;
 
-%% sort into bins and give results
-[bin_counts, lambda_bins] = histcounts(lambda_num, nbins);
-% get energy per bin
-energy_bins = e * bin_counts;
-results = [lambda_bins; bin_counts; energy_bins];
-filename = [num2str(T), 'K', num2str(N), 'bins.csv'];
+%% get exact solution for comparison
+% wavelengths corresponding to bins
+% use midpoints of bins, endpoint for last
+lambda_exact(1:(end-1)) = (lambda_bins(2:end) + lambda_bins(1:(end-1))) / 2;
+lambda_exact(end) = lambda_bins(end);
+lT_exact = lamabda_exact * T;
+% linearly interpolate to get I / sigma T^4
+IsT_exact = interp1(lT, IsT, lT_exact);
+% convert to emissive power
+Ilb_exact = IsT_exact * sigma * T^5;
+Elb_exact = pi * Ilb_exact;
+
+%% get error in the approximation and output results
+err = abs(Elb_num - Elb_exact);
+results = [lambda_bins; bin_counts; Elb_num; Elb_exact; err]';
+filename = 'results.csv';
 csvwrite(filename, results)
