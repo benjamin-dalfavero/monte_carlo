@@ -16,7 +16,7 @@ nbins = input('number of bins in distribution: ');
 xi = rand(1, N);
 % find lambda * T for each xi and convert to lambda
 lT_num = arrayfun(@(x) tablefind(lt, F, x), xi);
-% take lT only where concentrated
+% take lT only where planck function concentrated
 lT_conc = lT_num(and((lT_num >= 0.6e3), (lT_num <= 4e4)));
 % get wavelengths
 lambda_num = lT_conc / T;
@@ -31,13 +31,10 @@ e = sigma * T^4 / N;
 Elb_num = e * bin_counts;
 
 %% get exact solution for comparison
-% wavelengths corresponding to bins
-% use midpoints of bins, endpoint for last
-lambda_exact(1:(end-1)) = (lambda_bins(2:end) + lambda_bins(1:(end-1))) / 2;
-lambda_exact(end) = lambda_bins(end);
-lT_exact = lamabda_exact * T;
+% convert histogram bins to wavelength temp product
+lT_interp = lambda_bins * T;
 % linearly interpolate to get I / sigma T^4
-IsT_exact = interp1(lT, IsT, lT_exact);
+IsT_exact = interp1(lt, IsT, lT_interp);
 % convert to emissive power
 Ilb_exact = IsT_exact * sigma * T^5;
 Elb_exact = pi * Ilb_exact;
@@ -45,5 +42,7 @@ Elb_exact = pi * Ilb_exact;
 %% get error in the approximation and output results
 err = abs(Elb_num - Elb_exact);
 results = [lambda_bins; bin_counts; Elb_num; Elb_exact; err]';
-filename = 'results.csv';
-csvwrite(filename, results)
+headings = {'wavelength','bundles','numerical Elb', 'exact Elb', 'error'};
+results_table = array2table(results, 'VariableNames', headings);
+filename = 'results.txt';
+writetable(results_table, filename) 
