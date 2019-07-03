@@ -30,8 +30,16 @@ edges_conc = linspace(lambda_min, lambda_max, (nbins-1));
 edges = [edges_conc, max(lT) / T];
 % sort into bins
 [counts, edges] = histcounts(lambda_num, edges);
+% last edge is not needed - is endpoint of last bin
+edges = edges(1 : (end-1));
 
 %% convert bundle counts to physical quantities
 % energy per bin
 ebundle = sigma * T^4 / N;
 energy = ebundle * counts;
+% emissive power
+% get midpoint wavelength of each bin
+lam_mid = diff(edges);
+lam_mid = [lam_mid, edges(end) - edges(end - 1)];
+% dividge energy by wavelengths to get emissive power
+power = energy ./ lam_mid;
