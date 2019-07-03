@@ -10,8 +10,13 @@ function [xq] = tablefind(x, y, yq)
 % set up constants
 tol = 1e-4;
 % give error if out of bounds
-if yq < min(y) || yq > max(y)
-	disp('out of bounds')
+if yq < (min(y) - eps) || yq > (max(y) + eps)
+	disp(['out of bounds ', num2str(yq)])
+	if yq > max(y)
+		disp(['max is ', num2str(max(y))])
+	else
+		disp(['min is ', num2str(min(y))])
+	end
 	xq = NaN;
 	return;
 end

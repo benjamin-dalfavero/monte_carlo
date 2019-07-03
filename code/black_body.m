@@ -27,7 +27,7 @@ lambda_min = 0;
 lambda_max = 4e4 / T;
 edges_conc = linspace(lambda_min, lambda_max, (nbins-1));
 % add last point to capture wavelengths outside the concentrated region
-edges = [edges_conc, max(lT) / T];
+edges = [edges_conc, max(lt) / T];
 % sort into bins
 [counts, edges] = histcounts(lambda_num, edges);
 % last edge is not needed - is endpoint of last bin
