@@ -43,3 +43,7 @@ lam_mid = diff(edges);
 lam_mid = [lam_mid, edges(end) - edges(end - 1)];
 % dividge energy by wavelengths to get emissive power
 power = energy ./ lam_mid;
+% exact solution for emissive power 
+IsT_exact = interp1(lt, IsT, lam_mid * T);
+I_exact = IsT_exact * sigma * T^5;
+Eb_exact = I_exact * pi;
