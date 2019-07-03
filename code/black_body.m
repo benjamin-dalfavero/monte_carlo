@@ -47,3 +47,12 @@ power = energy ./ lam_mid;
 IsT_exact = interp1(lt, IsT, lam_mid * T);
 I_exact = IsT_exact * sigma * T^5;
 Eb_exact = I_exact * pi;
+% error in approximation
+err = abs(power - Eb_exact);
+
+%% write results to a table
+res = [edges; counts; energy; power; Eb_exact; err]';
+headings = {'wavelength', 'energy', 'power', 'Elb', 'error'};
+res_table = array2table(res, 'VariableNames', headings);
+filename = 'results.csv';
+writetable(res_table, filename)
