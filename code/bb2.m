@@ -1,4 +1,4 @@
-%% black body radiation
+% black body radiation
 
 %% read data, declare constants
 % table data
@@ -21,6 +21,8 @@ lT_edges = linspace(0, 4.0e4, nbins);
 lT_edges = [lT_edges, max(lT)];
 % edges for lambda
 lambda_edges = lT_edges / T;
+% get rid of last edge for lambda, is endpoint of bin
+lambda_edges = lambda_edges(1 : (end-1));
 % edges for F, corresponds to distribution of xi values
 F_edges = interp1(lT, F, lT_edges);
 
