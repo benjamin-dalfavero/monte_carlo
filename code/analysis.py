@@ -7,11 +7,17 @@ import numpy as np
 import matplotlib.pyplot as plt 
 
 # read csv files, store to an array
-df1 = pd.read_csv('trial1.csv')
-df2 = pd.read_csv('trial2.csv')
-df3 = pd.read_csv('trial3.csv')
-df4 = pd.read_csv('trial4.csv')
-frames = [df1, df2, df3, df4]
+for i in range(1, 5):
+    # filename of data
+    fname = 'trial' + str(i) + '.csv'
+    # store to array of frames
+    df[i-1] = pd.read_csv(fname)
 
 # plot each trial
-for i in range(0, 4)
+for i in range(0, 4):
+    # fetch data from frame
+    frame = df[i]
+    lam = frame['wavelength']
+    numerical = frame['power']
+    exact = frame['Elb']
+    # plot data in a figure
