@@ -1,0 +1,22 @@
+function [xq] = tablefind(x, y, yq)
+% [xq] = tablefind(x, y, yq)
+% reverse table lookup
+% find a value xq such that f(xq) = yq
+% x - interpolation table input
+% y - interpolation table output
+% yq - value to find
+% xq - inverse
+
+% set up constants
+tol = 1e-4;
+% find bracketed interval
+for i = 1:length(x)
+	ylow = y(i);
+	yup = y(i+1);
+	xlow = x(i);
+	xup = x(i+1);
+	if (ylow <= yq) && (yup >= yq)
+		break;
+	end
+end
+% find 
