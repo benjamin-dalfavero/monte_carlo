@@ -7,11 +7,16 @@ import numpy as np
 import matplotlib.pyplot as plt 
 
 # read csv files, store to an array
+df = []
 for i in range(1, 5):
     # filename of data
     fname = 'trial' + str(i) + '.csv'
     # store to array of frames
-    df[i-1] = pd.read_csv(fname)
+    frame = pd.read_csv(fname)
+    df.append(frame)
+
+# number of bundles used for each trial
+nbundles = [750, 1000, 10000, 30000]
 
 # plot each trial
 for i in range(0, 4):
@@ -21,3 +26,10 @@ for i in range(0, 4):
     numerical = frame['power']
     exact = frame['Elb']
     # plot data in a figure
+    plt.figure(i+1)
+    plt.plot(lam, numerical, '--')
+    plt.plot(lam, exact, '-')
+    plt.xlabel(r"\lambda (\mu m)")
+    plt.ylabel(r"E_{\lambda, b} (W m^-2 \mu m^-1)")
+    plt.title("E with " + str(nbundles[i]) + " bundles")
+    # generate filename and save figure
