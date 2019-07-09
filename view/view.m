@@ -7,30 +7,30 @@
 N = input('number of bundles: ');
 s = input('distance A1 to A2: ');
 R = input('radius of disk: ');
+fname = input('filename for output: ', 's');
 
-%% Sample distribution and convert to polar coordinates at A2
-% random variables to sample
-R_theta = rand(1, N);
-R_phi = rand(1, N);
-% get coordinates on A1
-theta = asin(sqrt(R_theta));
-phi = 2 * pi * R_phi;
-% convert to radius from center of A2
-xi = s * tan(theta);
-
-%% get exchange factor
-% count how many bundles fall within the given radius
-N2 = length(find(xi <= R));
-F = N2 / N;
-
-%% compare with exact exchange factor
-% see ch 4, slide 38 for derivation
+%% exact result for error calculation
 D = 2*R;
-F_exact = D^2 / (D^2 + 4*s^2);
-% find percent error
-perr = abs(F - F_exact) / F * 100;
+F_ex = D^2 / (D^2 + 4*s^2);
 
-%% ouptut final answer
-fprintf('Numerical view factor: %0.5f\n', F);
-fprintf('Exact view factor: %0.5f\n', F_exact)
-fprintf('Percent error: %f%%\n', perr)
+%% calculate exchange factor
+% iterative calculation
+% sample theta
+R_theta = rand(1, N);
+theta = asin(sqrt(R_theta));
+% get xi from theta
+xi = s * tan(theta);
+% cumulative total of bundles landing inside disk
+inside = xi <= R;
+bundles = cumsum(inside);
+% view factor
+n = 1:N;
+F = bundles ./ N;
+% get error
+perr = abs(F - F_ex) / F_ex;
+
+%% write to output file
+headings = {'bundles', 'F', 'error'};
+res = [n; F; perr]';
+results = array2table(res, 'VariableNames', headings);
+writetable(results, fname)
