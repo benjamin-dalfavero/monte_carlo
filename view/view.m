@@ -23,5 +23,14 @@ xi = s * tan(theta);
 N2 = length(find(xi <= R));
 F = N2 / N;
 
+%% compare with exact exchange factor
+% see ch 4, slide 38 for derivation
+D = 2*R;
+F_exact = D^2 / (D^2 + 4*s^2);
+% find percent error
+perr = abs(F - F_exact) / F * 100;
+
 %% ouptut final answer
-fprintf('View factor: %0.5f\n', F);
+fprintf('Numerical view factor: %0.5f\n', F);
+fprintf('Exact view factor: %0.5f\n', F_exact)
+fprintf('Percent error: %f%%\n', perr)
