@@ -29,9 +29,11 @@ for i in range(0, 4):
     plt.figure(i+1)
     plt.plot(lam, numerical, '--')
     plt.plot(lam, exact, '-')
+    # add titles and legends
     plt.xlabel(r"$\lambda (\mu m)$")
     plt.ylabel(r"$E_{\lambda, b} (W m^{-2} \mu m^{-1})$")
     plt.title("E with " + str(nbundles[i]) + " bundles")
+    plt.legend(('Monte Carlo', 'Exact'))
     # generate filename and save figure
     fname = str(nbundles[i]) + "bundles.jpg"
     plt.savefig(fname)
