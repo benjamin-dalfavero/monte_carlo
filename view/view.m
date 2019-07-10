@@ -7,7 +7,6 @@
 N = input('number of bundles: ');
 s = input('distance A1 to A2: ');
 R = input('radius of disk: ');
-fname = input('filename for output: ', 's');
 
 %% exact result for error calculation
 D = 2*R;
@@ -33,4 +32,5 @@ perr = abs(F - F_ex) / F_ex;
 headings = {'bundles', 'F', 'error'};
 res = [n; F; perr]';
 results = array2table(res, 'VariableNames', headings);
+fname = ['r', num2str(R), 's' num2str(s), '.csv'];
 writetable(results, fname)
