@@ -3,11 +3,11 @@ function case2(fname)
 
 % read parameters from file
 param = readtable(fname);
-Dx = param.Dx;
 Dy = param.Dy;
 Dz = param.Dz;
 x = param.x;
 y = param.y;
+z = param.z;
 N = param.N;
 % accumulators
 F = zeros(1, N);
