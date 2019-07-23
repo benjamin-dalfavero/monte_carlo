@@ -10,13 +10,32 @@ Dz = param.Dz;
 x = param.x;
 y = param.y;
 N = param.N;
-% solve case-by-case with superposition (see document)
-if (x == 0) && (y == 0) % corner at origin
-    F = vfac(Dx, Dy, Dz);
-elseif (x < 0) && (y < 0) % A2 over dA1
-    F = over(abs(x), Dx-abs(x), abs(y), Dy-abs(y), Dz);
-else % A2 in space
-    F = diagn(x, Dx, y, Dy, Dz);
+% determine if A2 crosses the x or y axis
+yt = (x == 0) || ((x < 0) && (Dx >= abs(x)));
+xt = (y == 0) || ((y < 0) && (Dy >= abs(y)));
+% solve for view factor, using xt and yt to determine case
+if xt && yt % A2 over dA1
+    F = over(abs(x), Dx - abs(x), abs(y), Dy - abs(y), Dz);
+elseif not(xt) && not(yt) % A2 in middle of octant
+    if (x > 0) && (y > 0) 
+        F = diagn(x, Dx, y, Dy, Dz);
+    elseif (x < 0) && (y > 0)
+        F = diagn(y, Dy, abs(x) - Dx, Dx, Dz);
+    elseif (x < 0) && (y < 0)
+        F = diagn(abs(x) - Dx, Dx, abs(y) - Dy, Dy, Dz);
+    else
+        F = diagn(abs(y) - Dy, Dy, x, Dx, Dz);
+    end
+else % A2 straddles axis
+    if (x < 0) && (y > 0)
+        F = straddle(y, Dy, abs(x), Dx-abs(x), Dz);
+    elseif (x > 0) && (y > 0)
+        F = straddle(x, Dx, abs(y), Dy-abs(y), Dz);
+    elseif (x < 0) && (y < 0)
+        F = straddle(abs(y)-Dy, Dy, abs(x), Dx-abs(x));
+    else
+        F = straddle(abs(x)-Dx, Dx, abs(y), Dy-abs(y), Dz);
+    end
 end
 % write result to file
 fname_out = strrep(fname, '.csv', '_exact.csv');
@@ -48,4 +67,10 @@ function F = diagn(w1, w2, h1, h2, Dz)
 % view factor for A2 diagonally offset from dA1
 F = vfac(w1+w2, h1+h2, Dz) - vfac(w1+w2, h1, Dz) ...
     - vfac(w1, h1+h2, Dz) + vfac(w1, h1, Dz);
+end
+
+function F = straddle(w1, w2, h1, h2, Dz)
+% view factor when the area straddles an axis
+F = vfac(w1+w2, h1, Dz) + vfac(w1+w2, h2, Dz) ...
+    - vfac(w1, h1, Dz) - vfac(w1, h2, Dz);
 end

@@ -22,11 +22,9 @@ for i = 1:N
     % get y and z componenets of displacement vector
     y2 = (Dx - x) * tan(phi);
     z2 = (Dx - x) * cot(theta) * sec(phi);
-    % get final positions
-    yf = y + y2;
-    zf = z2;
     % determine if collisison happens
-    if (yf >= 0) && (yf <= Dy) && (zf >= 0) && (zf <= Dz)
+    % nb bundle must land above z = 0 b/c of physical constrainsts
+    if (y2 >= y) && (y2 <= y + Dy) && (z2 >= 0) && (z2 >= z) && (z2 <= z + Dz)
         ncount = ncount + 1;
     end
     % store current view factor
