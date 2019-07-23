@@ -12,10 +12,20 @@ N = param.N;
 % solve case-by case
 if (z < 0) && (Dz <= abs(z))
     F = 0;
-elseif (z < 0) && (z 
+elseif (z < 0) && (Dz >= abs(z))
+    % modify dimensions to only consider z >= 0
+    Dz = Dz - abs(z);
+    z = 0;
+        
+end
 end
 
-function F = vfac(Dz, Dy, Dz)
+function F = solve_fac(x, y, z, Dy, Dz)
+% solve view factor given position and dimensions
+
+end
+
+function F = vfac(Dz, Dy, Dx)
 % calculate view factor for area at corner
 if (Dz == 0) || (Dy == 0) || (Dz == 0)
     F = 0;
@@ -27,14 +37,14 @@ else
 end
 end
 
-function F = straddle(w1, w2, h1, h2, Dz)
+function F = straddle(w1, w2, h1, h2, Dx)
 % view factor when A2 straddles z axis
-F = vfac(w1, h1+h2, Dz) + vfac(w2, h1+h2, Dz) ...
-    - vfac(w1, h1, Dz) - vfac(w2, h1, dz);
+F = vfac(w1, h1+h2, Dx) + vfac(w2, h1+h2, Dx) ...
+    - vfac(w1, h1, Dx) - vfac(w2, h1, Dx);
 end
 
-function diagn(w1, w2, h1, h2, Dz)
+function F = diagn(w1, w2, h1, h2, Dx)
 % view factor when A2 is offset diagonally from dA1
-F = vfac(w1+w2, h1+h2, Dz) - vfac(w1+w2, h1, Dz) ...
-    - vfac(w1, h1+h2, Dz) + vfac(w1, h1, Dz);
+F = vfac(w1+w2, h1+h2, Dx) - vfac(w1+w2, h1, Dx) ...
+    - vfac(w1, h1+h2, Dx) + vfac(w1, h1, Dx);
 end
