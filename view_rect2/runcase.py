@@ -27,14 +27,13 @@ F_ex = float(file.read())
 
 # read data from parameter file to generate plot title
 pdat = pd.read_csv(fname)
-ttl = r"$A_2$ %0.1f x %0.1f x %0.1f, $dA_1$ at (%0.1f, %0.1f)" \
-    % (pdat.Dx, pdat.Dy, pdat.Dz, pdat.x, pdat.y)
+ttl = r"%0.1f $\times$ %0.1f at (%0.1f, %0.1f, %0.1f)" % (pdat.Dy, pdat.Dz, pdat.x, pdat.y, pdat.z)
 
 # graph results and save in directory
 # plot data from results file
 plt.plot(n, F)
 # plot dashed line for exact value
-plt.plot([0, max(n)], [F_ex, F_ex], '--')
+plt.plot([0, max(n)], [F_ex, F_ex], '--r')
 # labels
 plt.xlabel('Bundles')
 plt.ylabel(r'$F_{12}$')

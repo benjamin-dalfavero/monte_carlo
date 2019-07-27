@@ -9,22 +9,25 @@ x = param.x;
 y = param.y;
 z = param.z;
 N = param.N;
-% solve case-by case
+% trim area so z >=0 and solve
 if (z < 0) && (Dz <= abs(z))
     % radiation does not reach below z = 0
+    disp('area below dA1')
     F = 0;
 elseif (z < 0) && (Dz >= abs(z))
     % modify A2 to only consider area above z = 0
+    disp('A2 trimmed')
     F = solve_fac(x, y, 0, Dy, Dz - abs(z));
 else % z >= 0
+    disp('no change to A2')
     F = solve_fac(x, y, z, Dy, Dz);
 end
 % write results to file
 fname_out = strrep(fname, '.csv', '_exact.csv');
 fname_out = strrep(fname_out, 'param', 'exact');
-fid = fopen(fname_out);
+fid = fopen(fname_out, 'w');
 fprintf(fid, "%0.5f\n", F);
-fclose(fname_out);
+fclose(fid);
 end
 
 function F = solve_fac(x, y, z, Dy, Dz)
@@ -32,27 +35,30 @@ function F = solve_fac(x, y, z, Dy, Dz)
 % note A2 must not extend below z = 0
 % this is taken care of in main function
 if (y < 0) && (Dy <= abs(y))
-    F = diagn(abs(y) - Dy, Dy, z, Dz, Dx);
+    disp('diagonal with y < 0')
+    F = diagn(abs(y) - Dy, Dy, z, Dz, x);
 elseif (y < 0) && (Dy > abs(y))
-    F = straddle(abs(y), Dy - abs(y), z, Dz, Dx);
+    disp('A2 straddles dA1')
+    F = straddle(abs(y), Dy - abs(y), z, Dz, x);
 else
-    F = diagn(y, Dy, z, Dz, Dx);
+    disp('diagonal with y > 0')
+    F = diagn(y, Dy, z, Dz, x);
 end
-end
-
-function F = straddle(w1, w2, h1, h2, Dx)
-% view factor when A2 straddles z axis
-F = vfac(w1, h1+h2, Dx) + vfac(w2, h1+h2, Dx) ...
-    - vfac(w1, h1, Dx) - vfac(w2, h1, Dx);
 end
 
 function F = diagn(w1, w2, h1, h2, Dx)
-% view factor when A2 is offset diagonally from dA1
-F = vfac(w1+w2, h1+h2, Dx) - vfac(w1+w2, h1, Dx) ...
-    - vfac(w1, h1+h2, Dx) + vfac(w1, h1, Dx);
+% view factor when A2 straddles z axis
+F = vfac(Dx, w1+w2, h1+h2) - vfac(Dx, w1, h1+h2) ...
+    - vfac(Dx, w1+w2, h1) + vfac(Dx, w1, h1);
 end
 
-function F = vfac(Dz, Dy, Dx)
+function F = straddle(w1, w2, h1, h2, Dx)
+% view factor when A2 is offset diagonally from dA1
+F = vfac(Dx, w1, h1+h2) - vfac(Dx, w1, h1) ...
+    + vfac(Dx, w2, h1+h2) - vfac(Dx, w2, h1);
+end
+
+function F = vfac(Dx, Dy, Dz)
 % calculate view factor for area at corner
 if (Dz == 0) || (Dy == 0) || (Dz == 0)
     F = 0;

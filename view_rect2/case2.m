@@ -20,8 +20,8 @@ for i = 1:N
     theta = asin(sqrt(R_theta));
     phi = 2 * pi * R_phi;
     % get y and z componenets of displacement vector
-    y2 = (Dx - x) * tan(phi);
-    z2 = (Dx - x) * cot(theta) * sec(phi);
+    y2 = x * tan(phi);
+    z2 = x * cot(theta) * sec(phi);
     % determine if collisison happens
     % nb bundle must land above z = 0 b/c of physical constrainsts
     if (y2 >= y) && (y2 <= y + Dy) && (z2 >= 0) && (z2 >= z) && (z2 <= z + Dz)
