@@ -32,9 +32,9 @@ else % A2 straddles axis
     elseif (x > 0) && (y > 0)
         F = straddle(x, Dx, abs(y), Dy-abs(y), Dz);
     elseif (x < 0) && (y < 0)
-        F = straddle(abs(y)-Dy, Dy, abs(x), Dx-abs(x));
+        F = straddle(abs(y)-Dy, Dy, abs(x), Dx-abs(x), Dz);
     else
-        F = straddle(abs(x)-Dx, Dx, abs(y), Dy-abs(y), Dz);
+        F = straddle(x, Dx, Dy-abs(y), abs(y), Dz);
     end
 end
 % write result to file

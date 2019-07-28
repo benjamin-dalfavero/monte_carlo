@@ -4,6 +4,7 @@
 
 import pandas as pd 
 import matplotlib.pyplot as plt 
+import matplotlib.axes as ax
 import sys
 import os
 
@@ -25,8 +26,10 @@ ttl = r"$A_1$ %0.1f $\times$ %0.1f, $A_2$ %0.1f $\times$ %0.1f at (%0.1f, %0.1f,
 # plot data and save to file
 plt.plot(n, F)
 plt.xlabel('bundles')
-plt.ylabel(r"$F_{12}")
+plt.ylabel(r"$F_{12}$")
 plt.title(ttl)
+F_f = F.iat[-1]
+plt.legend(["F = %0.5f" % F_f])
 # save to file
 fname_plot = fname.replace('.csv', '.png').replace('param', 'plots')
 plt.savefig(fname_plot)
